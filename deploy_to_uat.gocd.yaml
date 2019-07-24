@@ -16,12 +16,12 @@ pipelines:
         shallow_clone: false
     stages:
     - traffic_light:
-        notify-stage: success
+        notify_stage: success
         jobs:
-           notify-job:
-              elastic_profile_id: demo-app
-              tasks:
-              - exec:
+          notify_job:
+            elastic_profile_id: demo-app
+            tasks:
+            - exec:
                 command: echo
                 arguments: 
                 - "ready"
