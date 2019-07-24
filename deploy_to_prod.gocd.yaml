@@ -9,7 +9,10 @@ pipelines:
       KUBE_TOKEN: AES:l6lOvV00Bl1x8rtPqUBadA==:yURnnq7qPQw5gS3N/9P/CZtfZ2cKxwfgpJBuDu0TAcWNR3uLKEiIS40QH/jLJwEp0eO3aNeptC/Jh3X6hiS1724Ckm8RGcI27kvn/Ez3bV1JWg+DzBi6UsyZjbQSawXubIz1V84gzQaDPgbxxB8kh7siFokTs1uxX032y2hv/zHg7TaIXJB8TpjGSXRu7n/V+eY5fwZgyi1aMSkAYYjzBDhYj/QihNwr8cR0P8wVETdZ0NaFSn+eO4e8F/TT4NU3Ki82CNgdp6RAqUQa5hRl+j5Ju2pKXCF2IDz4qpWO8PoYIjQSebNkYaEDZm77ea3pcsNwk2NpaBSU9slkfyWv4xTV1lhm0V3tXbn29m/5jQBGjNkH7ANjRX0Qe7BB04tui6z1y3bDinR/XLr/HuPoo4T6n97aXmq3JD/SciMB495nrXbEz/O79S7kZIqVpLhTrwjS2apv+jPtXZWZyLlLyV9p/aei2Mye233/Yebixag60nYy0gNz6a9wsO/QgWI77HJf9F/xfmEpZs642Q5BKYFhTnaCUF3IElP3olvTNgs2w51ylwwHCG8dkPYjt4qgZ29mA99cgIZz6LsQpw9tU8eULR/nIatKvBHIIq/FCeodEb02dhnBpcUmr6HANwLNJUGxdEir/bLAAobB71BexAaeBSmRfMJilF4u/5j+kMSiUilLxWoAMtYDlEDgyqXT0klXMjr0yoxC+D6C2XWaLnp/EkiIEPbomoheJ/D/BJKt92JUupuVVJvD+1RoNrtQny+H+N96VC2e6HfBlElhVM+HiDic8N6D+qc9zObK0A2Kj+wK638+2b1+1/wDv5eyqLr5UvJqXTGw17Q2AjLZxxXRadqiSk2uWm1jqew3E2IUgiYSNLAyvNq0sgajAjVWU6/ZQp8TWcBqBw5WCaaaUKBA+detWpYNlSl5LmbYAuXYv8R6D/xyoX3CkaE+7pYihsyKFCoOrdxE7nftxtN6sWDFUWH05ldBAcUJnIn5aqUVQ91e3eDXKDBNjQuOhOdx20/jrzD7sm05a+idqQ9G3qGELr5+YSCa0cK10I/mnjP6iALkpTGZD8qk5VQKuT87mRJUoBBmiHL50EEVDDCIHSB4Bv7m9+WXMyjen/AmjXudOrwfsLdcYOPUCrdsM1cF9BOVBJm9XOc38AiKLdt1HA==
     materials:
       build:
-        pipeline: deploy_to_uat
+        pipeline: build_and_package
+        stage: build_stage
+      uat:
+        pipeline: uat
         stage: approved
       SourceCodeRepo:
         git: https://github.com/mtloria/node-bulletin-board.git
@@ -27,7 +30,7 @@ pipelines:
                   EnvironmentVariablePrefix: ''
                   SkipImagePulling: 'true'
                 artifact_id: bulletin-board
-                pipeline: deploy_to_uat/build_and_package
+                pipeline: build_and_package
                 stage: build_stage
                 job: build_image
                 artifact_origin: external
