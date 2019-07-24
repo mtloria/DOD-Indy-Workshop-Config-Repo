@@ -1,0 +1,38 @@
+format_version: 4
+pipelines:
+  deploy_to_prod:
+    group: kubernetes
+    display_order: 3
+    environment_variables:
+      NAMESPACE: gocd
+    secure_variables:
+      KUBE_TOKEN: AES:YtdbUQFk7wk1/osuAfvoqQ==:3JPNhuk4h4HS7/M/L7v6pkCjLCTrEDk6NrGw7EQHJCfjc6xwoU24fEItvLaJ8jXJ7VkZrFgiBH/zwsaGf2DRx1cMJ6aF7Wxa7qVFohVQ0np/zPUEflFjq2yL1jPwSR5WNO+veLym5LEF8KkswqhE6D5vHx+DGHAjSDgatU3aMuzIo2808sHXvtpZHihg7oG1UaAs7s9mvpVRj+1ASqsCID/BkRRhWtFtLSD69uLq3CbmveEFHxkythzquqNaKE+/qXZnmWJFB/Hzqss2JAcHETIIa1TIrp7/+H2yXouS2XuK7tx3ByX/5muYAC9jeyHDf6Ay+cVm9F/Cvrbw/0bAa1Au/We1c081obS2mZz15ep/98YHOi/a0gGdrE9Hdako4ev9o8TFe5hT5Q4uxYzbKeeIpDIM0i24JYuvMOLT9azvf63x0tEsdIVpPhE8RxDTYKjwmV1ZfqauhQZQYgs+ZTxghHbKNzxCcCYEAMhSQSRlu5ruJOhUoVUT85FzGUtyTXUZSl5g3R+iH+jxOm3vAvSGiK/4V8R7Bd0Yz3bMYZW34pOA7R8q0Rp9WsEfQlbcNNyvhJ54Ad0tEmwnoqCkr57Mi5YX0HpugORcVgPLwZT/KwkgySX0gxnS96D8aPe4FYnzi0dbdTsJ/hNBbM8aCmxlJP3kI7bjV51XloO0TL+vOh/tY+nXohF1ejGoB3qe/DO7a3oNtoBXj44fbBk96RcvHfNx4kKLlRdf8iEhicppk9gfIY3OK+S2qtSYOnclANoMMrZYnCy5W0aiFrQ/nd+IwZPWGIBiZOj0gEcTd6hl/UjSXADXrh5bLYc1HcxVjUyNoiGZpBY7IZfO5ckQQCxLb+CAyaR2wC+lrB8rWGrrKeNtKVlpB4llQLvHXj3HeL6q5k6xp9api/22uH0MtLDCsagz27SI1lJHf3t9xXAKx7MIKOR7/vKmovJG23wCwZGwQuZY7QUAroxatxTVknL0kyunrbPe1lLANWwYgoHyOLK/eUgbtsxoT87wW6WX5QifpuxUW8GVmFWZOZedHAA0NmNwWrA7CNgGMp2TlLGeAJZfB/3zsOMOwpV2ViBhcKsSMGNWiKQhrX6aPzQwVH6yna6+/8mqREYJNwW2fwum0wmq33HCDXdrzsFNu1J7quG8svyUGpWEt3TQuvoGRJgjIbMZP8nfts14kk58XO0=
+    materials:
+      build:
+        pipeline: build_and_package
+        stage: test_stage
+      SourceCodeRepo:
+        git: https://github.com/mtloria/node-bulletin-board.git
+        shallow_clone: false
+    stages:
+    - deploy_to_prod:
+        approval:
+          type: success
+        jobs:
+          deploy:
+            elastic_profile_id: demo-app
+            tasks:
+            - fetch:
+                options:
+                  EnvironmentVariablePrefix: ''
+                  SkipImagePulling: 'true'
+                artifact_id: bulletin-board
+                pipeline: build_and_package
+                stage: build_stage
+                job: build_image
+                artifact_origin: external
+                run_if: passed
+            - exec:
+                command: ./app-deployment.sh
+                arguments:
+                run_if: passed
