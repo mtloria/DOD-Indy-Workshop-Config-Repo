@@ -12,7 +12,7 @@ pipelines:
         pipeline: build_and_package
         stage: build_stage
       uat:
-        pipeline: uat
+        pipeline: deploy_to_uat
         stage: approved
       SourceCodeRepo:
         git: https://github.com/mtloria/node-bulletin-board.git
