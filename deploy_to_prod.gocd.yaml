@@ -13,7 +13,7 @@ pipelines:
         stage: build_stage
       uat:
         pipeline: deploy_to_uat
-        stage: approved
+        stage: approval
       SourceCodeRepo:
         git: https://github.com/mtloria/node-bulletin-board.git
         shallow_clone: false
